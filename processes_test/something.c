@@ -1,2 +1,10 @@
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>
 
+int main(int argc, char* argv[]) {
+    printf("Hello World!");
+    return 0;
+    
+}
