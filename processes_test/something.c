@@ -7,20 +7,16 @@
 int main(int argc, char* argv[]) {
 
     pid_t pid = fork();
-    int n;
     if (pid == 0) {
-        n = 1;
+        sleep(1);
+    }
+    printf("PID: %d, PPID: %d\n", getpid(), getppid());
+    int res = wait(NULL);
+    if (res == -1) {
+        printf("No children left to wait for\n");
     }
     else {
-        n = 6;
-    }
-    if (pid != 0) {
-       wait(NULL); 
-    }
-    
-    for (int i=n; i<n+5; i++) {
-        printf("%d ", i);
-        fflush(stdout);
+        printf("%d finished execution\n", res);
     }
     return 0;
     
