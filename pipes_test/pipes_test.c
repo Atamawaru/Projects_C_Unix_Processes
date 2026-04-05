@@ -11,21 +11,29 @@ int main(int argc, char* argv[]) {
         printf("Error creating pipe\n;");
         return 1;
     }
+    int n = 200;
     int pid = fork();
     if (pid == 0) {
         close(fd[0]);
-        int x;
-        printf("Input a number: ");
-        scanf(" %d", &x);
-        write(fd[1], &x, sizeof(int));
+
+        char* string = malloc(sizeof(char *) * n);
+        
+        printf("Input a string: ");
+        fgets(string, n, stdin);
+        if (write(fd[1], string, strlen(string))==-1){
+            printf("Error with writing to pipe\n");
+        }
+
         close(fd[1]);
     }
-    else {
+    else 
+    {
         close(fd[1]);
-        int y;
-        read(fd[0], &y, sizeof(int));
+        
+        char* y = malloc(sizeof(char *) * n);
+        read(fd[0], y, sizeof(char *) * n);
+        printf("Got from child process %s\n", y);
         close(fd[0]);
-        printf("Got from child process %d\n", y);
     }
     return 0;
     
