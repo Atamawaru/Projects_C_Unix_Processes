@@ -1,8 +1,4 @@
-#include <ctype.h>
-#include <errno.h>
 #include <fcntl.h>
-#include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -28,13 +24,16 @@ int main(int argc, char* argv[]) {
     for (int i=0; i<n; i++) {
         sum+=arr[i];
     }
-    printf("Sum of gotten numbers: %d\n", sum);
     close(fd);
-    return 0;
 
-    //int fdw = open(fifo_name, O_WRONLY);
-    //if (fdw == -1) {
-    //   e
-    
-    //}
+    int fdw = open(fifo_name, O_WRONLY);
+    if (fdw == -1) {
+        perror("Error opening for writing to fifo (sum): ");
+        return 3;
+    }
+    if (write(fdw, &sum, sizeof(sum)) == -1) {
+        perror("Error writing to fifo (sum): ");
+    }
+    close(fdw);
+    return 0;
 }

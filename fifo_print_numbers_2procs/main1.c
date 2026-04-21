@@ -32,5 +32,17 @@ int main(int argc, char* argv[]) {
         printf("Wrote: %d\n", nums[i]);
     }
     close(fdin);
+    int sum=0;
+    int fdsum = open(fifo_name, O_RDONLY);
+    if (fdsum == -1) {
+        perror("Error opening writing pipe: ");
+        return 4;
+    }
+    if (read(fdsum, &sum, sizeof(sum)) == -1) {
+        perror("Error reading fifo pipe (sum): ");
+        return 5;
+    }
+    printf("Got from other process sum: %d\n", sum);
+    close(fdsum);
     return 0;
 }
