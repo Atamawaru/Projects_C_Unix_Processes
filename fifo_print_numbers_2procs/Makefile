@@ -1,3 +1,4 @@
+MAKEFLAGS=-j2
 all: main1 main2 run
 
 main1: main1.c

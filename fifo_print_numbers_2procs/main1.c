@@ -18,12 +18,18 @@ int main(int argc, char* argv[]) {
     srand(time(NULL));
     for (int i=0; i<n; i++) {
         nums[i]=rand() % 100 + 1;
-        printf("Generated num: %d\n", nums[i]);
     }
     int fdin = open(fifo_name, O_WRONLY);
     if (fdin == -1) {
         perror("Error opening fifo: ");
         return 2;
+    }
+    for (int i=0; i<n; i++) {
+        if (write(fdin, &nums[i], sizeof(nums[i]))==-1){
+            perror("Error writing to fifo: ");
+            return 3;
+        }
+        printf("Wrote: %d\n", nums[i]);
     }
     close(fdin);
     return 0;
