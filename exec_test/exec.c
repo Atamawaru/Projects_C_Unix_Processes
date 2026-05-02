@@ -9,11 +9,22 @@ int main(int argc, char *argv[]) {
     }
     
     if (pid == 0) {
-        execlp("ping", "ping", "-c", "3", "google.com", NULL);
+        //int err = execlp("ls", "ls", "-la", "Projects_C_Unix_Processes", NULL);
+        int err = execlp("ping", "ping", "-c", "3", "google.com", NULL);
+        if (err == -1) {
+            printf("Error. Could not find command to execute.\n");
+            return 0;
+        }
     }
     else {
-        wait(NULL);
-        printf("Success!\n");
+        int wstatus;
+        wait(&wstatus);
+        if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == 0) {
+            printf("Success! return code: %d\n", WEXITSTATUS(wstatus));
+        }
+        else {
+            printf("Error. Failed to ping. return code: %d\n", WEXITSTATUS(wstatus));
+        }
     }
     return 0;
 }
