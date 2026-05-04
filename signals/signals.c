@@ -12,6 +12,7 @@ void signalHandler(int sig){
 }
 
 int main(int argc, char *argv[]) {
+    
     pid_t pid = fork();
     if (pid==-1) {
         perror("Error forking: ");
@@ -20,12 +21,19 @@ int main(int argc, char *argv[]) {
 
     if (pid==0) {
         while (1) {
-            printf("Text goes here\n");
+            printf("Some text\n");
             usleep(50000);
         }
     }
     else {
-        sleep(5);
+        int t=-1;
+        kill(pid, SIGSTOP);
+        do {
+            printf("Time for execution: ");
+            scanf("%d", &t);
+        } while (t < 0);
+        kill(pid, SIGCONT);
+        sleep(t);
         kill(pid, SIGKILL);
         wait(NULL);
     }
